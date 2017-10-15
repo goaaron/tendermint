@@ -118,6 +118,7 @@ func makeJSONRPCHandler(funcMap map[string]*RPCFunc, logger log.Logger) http.Han
 		// The Server MUST NOT reply to a Notification, including those that are within a batch request.
 		if request.ID == "" {
 			logger.Debug("HTTPJSONRPC received a notification, skipping... (please send a non-empty ID if you want to call a method)")
+			WriteRPCResponseHTTP(w, types.RPCInvalidParamsError(request.ID, errors.New(`expecting "id"`)))
 			return
 		}
 		if len(r.URL.Path) > 1 {
